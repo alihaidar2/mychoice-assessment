@@ -12,7 +12,9 @@ import {
   Spinner,
   Center,
   Box,
+  Link,
 } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 interface Item {
   id: number;
@@ -48,7 +50,12 @@ export function ItemList() {
       <Tbody>
         {data?.map((item) => (
           <Tr key={item.id}>
-            <Td>{item.id}</Td>
+            <Td>
+              {" "}
+              <Link as={RouterLink} to={`/${item.id}`} color="teal.600">
+                {item.id}{" "}
+              </Link>{" "}
+            </Td>{" "}
             <Td>{item.name}</Td>
             <Td>{item.group}</Td>
           </Tr>
