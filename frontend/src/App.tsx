@@ -1,6 +1,8 @@
+// src/App.tsx
 import React from "react";
-import { Container, Heading, Box, Link } from "@chakra-ui/react";
+import { Box, Link } from "@chakra-ui/react";
 import { Routes, Route, Link as RouterLink } from "react-router-dom";
+import { Layout } from "./components/Layout";
 import { ItemList } from "./components/ItemList";
 import { CreateItem } from "./components/CreateItem";
 import { ItemDetail } from "./components/ItemDetail";
@@ -8,7 +10,7 @@ import { EditItem } from "./components/EditItem";
 
 function App() {
   return (
-    <Container maxW="container.md" py={8}>
+    <Layout>
       <Box mb={4}>
         <Link as={RouterLink} to="/">
           ← Back to list
@@ -19,7 +21,6 @@ function App() {
           path="/"
           element={
             <>
-              <Heading mb={4}>Items</Heading>
               <CreateItem />
               <ItemList />
             </>
@@ -28,7 +29,7 @@ function App() {
         <Route path=":id" element={<ItemDetail />} />
         <Route path=":id/edit" element={<EditItem />} />
       </Routes>
-    </Container>
+    </Layout>
   );
 }
 
