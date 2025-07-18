@@ -90,6 +90,8 @@ _In a separate terminal:_
 
 ```bash
 cd frontend
+cp ../.env.example .env
+
 npm install
 npm run dev -- --host              # serves at http://localhost:5173
 ```
