@@ -1,3 +1,4 @@
+// src/components/CreateItem.tsx
 import React from "react";
 import {
   Button,
@@ -13,24 +14,22 @@ import {
   Select,
   useDisclosure,
   useToast,
+  FormErrorMessage,
+  IconButton,
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
 import type { AxiosError } from "axios";
 
-// 1. Define the Zod schema to mirror backend rules:
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
-  group: z
-    .enum(["Primary", "Secondary"] as const)
-    .refine((g) => ["Primary", "Secondary"].includes(g), {
-      message: "Group must be Primary or Secondary",
-    }),
+  group: z.enum(["Primary", "Secondary"] as const),
 });
-
 type FormData = z.infer<typeof schema>;
 
 export function CreateItem() {
@@ -47,7 +46,6 @@ export function CreateItem() {
     resolver: zodResolver(schema),
   });
 
-  // 2. Define the mutation to POST and invalidate the list:
   const mutation = useMutation({
     mutationFn: (newItem: FormData) =>
       api.post("/api/items/", newItem).then((res) => res.data),
@@ -75,14 +73,19 @@ export function CreateItem() {
     },
   });
 
-  // 3. Hook up form submit:
-  const onSubmit = (data: FormData) => mutation.mutate(data);
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    mutation.mutate(data);
+  };
 
   return (
     <>
-      <Button onClick={onOpen} colorScheme="teal" mb={4}>
-        New Item
-      </Button>
+      <IconButton
+        onClick={onOpen}
+        colorScheme="teal"
+        icon={<AddIcon />}
+        aria-label="Add New Item"
+        _hover={{ transform: "scale(1.05)" }}
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -91,7 +94,8 @@ export function CreateItem() {
           <ModalBody>
             <FormControl isInvalid={!!errors.name} mb={3}>
               <FormLabel>Name</FormLabel>
-              <Input placeholder="Item name" {...register("name")} />
+              <Input {...register("name")} />
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={!!errors.group}>
               <FormLabel>Group</FormLabel>
@@ -99,13 +103,19 @@ export function CreateItem() {
                 <option value="Primary">Primary</option>
                 <option value="Secondary">Secondary</option>
               </Select>
+              <FormErrorMessage>{errors.group?.message}</FormErrorMessage>
             </FormControl>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={onClose} mr={3}>
               Cancel
             </Button>
-            <Button colorScheme="teal" type="submit" isLoading={isSubmitting}>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              isLoading={isSubmitting}
+              _hover={{ transform: "scale(1.05)" }}
+            >
               Create
             </Button>
           </ModalFooter>

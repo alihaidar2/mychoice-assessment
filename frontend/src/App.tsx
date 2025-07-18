@@ -1,27 +1,34 @@
 // src/App.tsx
 import React from "react";
 import { Box, Link } from "@chakra-ui/react";
-import { Routes, Route, Link as RouterLink } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link as RouterLink,
+  useLocation,
+} from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { ItemList } from "./components/ItemList";
-import { CreateItem } from "./components/CreateItem";
 import { ItemDetail } from "./components/ItemDetail";
 import { EditItem } from "./components/EditItem";
 
 function App() {
+  const location = useLocation();
+
   return (
     <Layout>
-      <Box mb={4}>
-        <Link as={RouterLink} to="/">
-          ← Back to list
-        </Link>
-      </Box>
+      {location.pathname !== "/" && (
+        <Box mb={4}>
+          <Link as={RouterLink} to="/">
+            ← Back to list
+          </Link>
+        </Box>
+      )}
       <Routes>
         <Route
           path="/"
           element={
             <>
-              <CreateItem />
               <ItemList />
             </>
           }
