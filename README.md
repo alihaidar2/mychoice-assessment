@@ -1,7 +1,5 @@
 # myChoice Assessment
 
-# myChoice Assessment
-
 Building on the given Full-Stack Coding Task, this repository delivers:
 
 - **Backend** in **Python 3.10** with **Django 5.2** & **Django REST Framework**  
